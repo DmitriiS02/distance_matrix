@@ -3,6 +3,8 @@
     <output-path>$PROJECT_DIR$/out/artifacts/distance_matrix_jar</output-path>
     <root id="archive" name="distance_matrix.jar">
       <element id="module-output" name="distance_matrix" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../java_libs/poi-3.15/poi-3.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../java_libs/poi-3.15/poi-ooxml-3.15.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

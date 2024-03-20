@@ -9,51 +9,74 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="97670564-04d5-4293-8b0a-38dbd037ad9f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/distance_matrix_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/META-INF/MANIFEST.MF" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/distance_matrix/ApplicationMintrance.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/distance_matrix/MyFileFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/distance_matrix/config.properties" afterDir="false" />
+    <list default="true" id="97670564-04d5-4293-8b0a-38dbd037ad9f" name="Changes" comment="Firs Commite">
+      <change afterPath="$PROJECT_DIR$/src/main/java/ru/distance_matrix/TEST.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/META-INF/response.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/distance_matrix_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/distance_matrix_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/distance_matrix_jar/distance_matrix.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/distance_matrix_jar/distance_matrix.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/distance_matrix/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/distance_matrix/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/distance_matrix/.idea/artifacts/distance_matrix_jar.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/distance_matrix/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/distance_matrix/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/distance_matrix/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/distance_matrix/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/distance_matrix/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/distance_matrix/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/distance_matrix/ru/distance_matrix/MyFileFilter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/distance_matrix/src/main/java/ru/distance_matrix/config.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/distance_matrix/Герб-РФ.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/distance_matrix/ApplicationMintrance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/distance_matrix/ApplicationMintrance.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/distance_matrix/config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/distance_matrix/config.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
   </component>
   <component name="ProjectId" id="2doJIX5zq8tjQxABgojWlXZuGvl" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/my_java/distance_matrix&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;File.Encoding&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/java_libs/gson-2.10.1.jar",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "MavenSettings",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="ApplicationMintrance" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="src.main.java.ru.distance_matrix.ApplicationMintrance" />
@@ -79,12 +102,64 @@
       <updated>1710668418112</updated>
       <workItem from="1710668419366" duration="1556000" />
       <workItem from="1710675706096" duration="7674000" />
-      <workItem from="1710701623568" duration="6423000" />
+      <workItem from="1710701623568" duration="6868000" />
+      <workItem from="1710858915375" duration="3464000" />
+      <workItem from="1710863926944" duration="1393000" />
+      <workItem from="1710865404719" duration="22875000" />
+      <workItem from="1710934663989" duration="24263000" />
     </task>
+    <task id="LOCAL-00001" summary="Firs Commite">
+      <option name="closed" value="true" />
+      <created>1710708142927</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1710708142927</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Firs Commite">
+      <option name="closed" value="true" />
+      <created>1710708367419</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1710708367419</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Firs Commite" />
+    <option name="LAST_COMMIT_MESSAGE" value="Firs Commite" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/ru/distance_matrix/TEST.java</url>
+          <line>17</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/ru/distance_matrix/ApplicationMintrance.java</url>
+          <line>311</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
