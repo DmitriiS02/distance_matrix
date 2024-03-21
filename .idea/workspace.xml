@@ -9,28 +9,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="97670564-04d5-4293-8b0a-38dbd037ad9f" name="Changes" comment="Firs Commite">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ru/distance_matrix/TEST.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/META-INF/response.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/distance_matrix_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/distance_matrix_jar.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="97670564-04d5-4293-8b0a-38dbd037ad9f" name="Changes" comment="Working Console">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/distance_matrix_jar/distance_matrix.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/distance_matrix_jar/distance_matrix.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/distance_matrix/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/distance_matrix/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/distance_matrix/.idea/artifacts/distance_matrix_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/distance_matrix/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/distance_matrix/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/distance_matrix/.idea/uiDesigner.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/distance_matrix/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/distance_matrix/META-INF/MANIFEST.MF" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/distance_matrix/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/distance_matrix/ru/distance_matrix/MyFileFilter.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/distance_matrix/src/main/java/ru/distance_matrix/config.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/distance_matrix/Герб-РФ.ico" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ru/distance_matrix/ApplicationMintrance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/distance_matrix/ApplicationMintrance.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ru/distance_matrix/config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/distance_matrix/config.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,7 +87,7 @@
       <workItem from="1710858915375" duration="3464000" />
       <workItem from="1710863926944" duration="1393000" />
       <workItem from="1710865404719" duration="22875000" />
-      <workItem from="1710934663989" duration="24263000" />
+      <workItem from="1710934663989" duration="25130000" />
     </task>
     <task id="LOCAL-00001" summary="Firs Commite">
       <option name="closed" value="true" />
@@ -124,7 +105,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710708367419</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Working Console">
+      <option name="closed" value="true" />
+      <created>1710967796270</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1710967796270</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -143,7 +132,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Firs Commite" />
-    <option name="LAST_COMMIT_MESSAGE" value="Firs Commite" />
+    <MESSAGE value="Working Console" />
+    <option name="LAST_COMMIT_MESSAGE" value="Working Console" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -152,11 +142,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/ru/distance_matrix/TEST.java</url>
           <line>17</line>
           <option name="timeStamp" value="12" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/ru/distance_matrix/ApplicationMintrance.java</url>
-          <line>311</line>
-          <option name="timeStamp" value="17" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

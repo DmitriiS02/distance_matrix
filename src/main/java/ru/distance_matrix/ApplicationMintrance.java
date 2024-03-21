@@ -59,7 +59,7 @@ public class ApplicationMintrance {
                 "\n" +
                 "Для продолжения работы выберите необходимую опцию из меню.\n");
         System.out.println("Меню:\n");
-        System.out.println("1. Выбрать Excel файл"); // TODO: 18.03.2024
+        System.out.println("1. Выбрать Excel файл");
         System.out.println("2. Просмотреть текущий ключ доступа");
         System.out.println("3. Обновить ключ доступа");
         System.out.println("4. Выход");
@@ -98,7 +98,7 @@ public class ApplicationMintrance {
                     } catch (Exception e) {
                         System.out.println("\nВозникла непредвиденная ошибка\n" + e);
                     }
-                    for (int i = 0; i < 2; i++) { //i<requestArray.size()
+                    for (int i = 0; i < 2; i++) { //i<requestArray.size() TODO:23.03.2025  Здесь должно быть либо статическое значение, либо меняем ширину в динамике
                         //System.out.println(requestArray.get(i));
                         try {
                             JsonObject result = requestData(requestArray.get(i));//Идем по сформированному request одной строки
@@ -241,7 +241,7 @@ public class ApplicationMintrance {
 //                    }
                     requestBody.append("https://api.routing.yandex.net/v2/distancematrix?origins="+latOrigin+","+lonOrigin+"&destinations=");
                     //System.out.println(requestBody); //Смотриим на тело запросаа
-                    for(int j = 26;j<29;j++){
+                    for(int j = 26;j<29;j++){ //TODO: 23.03.2024
                         Row curRowDestinationLat = sheet.getRow(1);
                         Row curRowDestinationLon = sheet.getRow(2);
                         String latDest = curRowDestinationLat.getCell(j).getStringCellValue();
@@ -301,14 +301,14 @@ public class ApplicationMintrance {
         Workbook workbook = new XSSFWorkbook(inputStream);
         Sheet sheet = workbook.getSheetAt(0);
 
-        for (int rowIndex = rowToStart, i = 0; i<2; i++, rowIndex++) {
+        for (int rowIndex = rowToStart, i = 0; i<2; i++, rowIndex++) { //TODO:23.03.2024  Здесь должно быть либо статическое значение, либо меняем ширину в динамике
             JsonObject singleResponse = arrayResult.get(i);
             JsonObject rows = singleResponse.getAsJsonArray("rows").get(0).getAsJsonObject();
             JsonArray elements = rows.getAsJsonArray("elements");
 
             Row row = sheet.getRow(rowIndex);
 
-            for(int col = 26, j=0; col < 29;j++, col++){
+            for(int col = 26, j=0; col < 29;j++, col++){ //TODO:23.03.2024 Здесь должно быть либо статическое значение, либо меняем ширину в динамике
                 JsonObject currentElement = elements.get(j).getAsJsonObject();
                 String status = currentElement.get("status").getAsString();
                 if ("FAIL".equals(status)){
