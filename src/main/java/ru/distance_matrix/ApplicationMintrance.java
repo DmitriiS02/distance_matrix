@@ -17,6 +17,7 @@ import com.sun.tools.javac.Main;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.net.*;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.prefs.Preferences;
@@ -30,13 +31,13 @@ import com.google.gson.JsonObject;
 public class ApplicationMintrance {
     private static double prevResult = 0;
     private static final String CONFIG_FILE = "C:/my_java/distance_matrix/src/main/java/ru/distance_matrix/config.properties";
-    private static boolean inWork = true;
+    private static boolean inWork = true; //Переменная определяющая работу программы
     private static String apiKey = "abc3-dds3-ssa2";
-    private static File executibleFile;
-    private static int rowToStart =10;
-    private static int generalColumns;
+    private static File executibleFile; // Здесь храним файл выбранный пользователем
+    private static int rowToStart =10; //     В переменной хранится значение индекса строки с которой необходимо начать
+    private static int generalColumns; // Здесь храним индекс последней колонки + 1
+    private static int generalRows; // Здесь храним число строк оптимальных для выполнения 1000 запросов в день, зависит от числа столбцов
 
-    private static int generalRows;
     /* main method is the entry point of the program.
     It prompts the user to enter an expression and uses the evaluate method to evaluate it.
     If the user enters "q", the program will exit.
@@ -93,7 +94,10 @@ public class ApplicationMintrance {
                             "а в столбце \"W\" c 5-й строки перечислены координаты западной долготы.\n");
                     try {
                         requestArray = fileExecuting();
-                    } catch (NullPointerException e) {
+                    } catch (ColsMoreHundredException e){
+                        System.out.println("\n К сожалению в вашем файле указано более 100 пунктов назначения");
+                        continue;
+                    }catch (NullPointerException e) {
                         System.out.println("\nФайл Пуст. Проверьте на содержание\n\n" + e);
                     } catch (NotOfficeXmlFileException e) {
                         System.out.println("\nНеверный формат входного файла, выберите .xlsx" + e);
@@ -111,7 +115,12 @@ public class ApplicationMintrance {
                     }
 
 
-                    WriteInExcel(resultArray);
+                    try{
+                        WriteInExcel(resultArray);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        System.out.println("\nВ выбранном файле отсутвует 2й лист" );
+                    }
 
                     //System.out.println(resultArray);
                     break;
@@ -216,7 +225,7 @@ public class ApplicationMintrance {
         return resultArray;
     }
 
-    public static ArrayList<String> fileExecuting() throws IOException {
+    public static ArrayList<String> fileExecuting() throws IOException, ColsMoreHundredException {
         Frame frame = new Frame();
         FileDialog fileDialog = new FileDialog(frame, "Выберите файл", FileDialog.LOAD);
         // Установка фильтра файлов
@@ -245,7 +254,12 @@ public class ApplicationMintrance {
                 Workbook book = new XSSFWorkbook(inputStream);
                 Sheet sheet = book.getSheetAt(0); //TODO: Добавить второй лист.
                 DetectionOfLastRow(sheet);
-                CountingGeneralCols(sheet);
+                try {
+                    CountingGeneralCols(sheet);
+                } catch (ColsMoreHundredException e) {
+                    throw new ColsMoreHundredException("Колонок больше 100");
+                }
+                FindCountofExecutibleRows(sheet);
 
                 for (int rowOrig = rowToStart;rowOrig<=rowToStart+generalRows-1;rowOrig++){ // TODO: Поправить в циклах со статикой перед сдачей.
 
@@ -295,7 +309,7 @@ public class ApplicationMintrance {
         }
         return requestBodyList;
     }
-    public static void CountingGeneralCols(Sheet sheet){
+    public static void CountingGeneralCols(Sheet sheet) throws ColsMoreHundredException {
         Row row = sheet.getRow(3);//Получаем строку по которой будем считать кол-во столбцов
         boolean rowEnded =false;
         int cellIndex = 9;
@@ -311,12 +325,16 @@ public class ApplicationMintrance {
             System.out.println(cell+" ");
             cellIndex++;
             countCols++;
+            if(countCols>100){
+                throw new ColsMoreHundredException("Ошибка");
+            }
         }
         generalColumns = cellIndex;
         CountingRows(countCols);
         System.out.println(cellIndex+" " +countCols);
 
     }
+
     public static void CountingRows(int countCols){
         int limitOfDayRequest = 100000;
         int res;
@@ -324,13 +342,34 @@ public class ApplicationMintrance {
         generalRows = res;
         System.out.println(res);
     }
+    public static void  FindCountofExecutibleRows(Sheet sheet){
+        int emptyRowCount = 0;
+        int localI = rowToStart;
+        while (true){
+            Row row = sheet.getRow(localI);
+            if(row == null){
+                break;
+            }
+            Cell cell = row.getCell(5); // По структуре ищем по колонке с северной широтой Структура
+            if(cell ==null||cell.getStringCellValue() == ""){
+                break;
+            }else {
+                localI++;
+                emptyRowCount++;
+            }
+        }
+        if (generalRows >emptyRowCount){
+            generalRows =emptyRowCount;
+        }
+    }
 
     public static void DetectionOfLastRow(Sheet sheet) throws IOException {
 
 
-        int startRow = rowToStart; // Начальная строка диапазона
+        int startRow = 10; // Начальная строка диапазона
         int endRow = sheet.getLastRowNum(); // Конечная строка диапазона
         int columnToCheck = 9;
+        int rowCounter = 0;
 
         for (int i = startRow; i <= endRow; i++) {
             Row row = sheet.getRow(i);
@@ -339,13 +378,15 @@ public class ApplicationMintrance {
                 rowToStart = i;
                 break;
             }
+            rowToStart = i;
         }
     }
     public static void WriteInExcel(ArrayList<JsonObject> arrayResult) throws IOException {
         File execFile = executibleFile;
         FileInputStream inputStream = new FileInputStream(execFile);
         Workbook workbook = new XSSFWorkbook(inputStream);
-        Sheet sheet = workbook.getSheetAt(0);
+        Sheet sheetMinutes = workbook.getSheet("УДМУРТСКАЯ_РЕСП(СЕЛТИНСКИЙ)мин");
+        Sheet sheetKilometers = workbook.getSheet("УДМУРТСКАЯ_РЕСП(СЕЛТИНСКИЙ)км"); //TODO: Отдельный метод валидации файла
 
         for (int rowIndex = rowToStart, i = 0; i<arrayResult.size(); i++, rowIndex++) { //TODO:23.03.2024  Здесь должно быть либо статическое значение, либо меняем ширину в динамике
             JsonObject singleResponse = arrayResult.get(i);
@@ -356,21 +397,34 @@ public class ApplicationMintrance {
             JsonObject rowElement = rows.get(0).getAsJsonObject();
             JsonArray elements = rowElement.getAsJsonObject().getAsJsonArray("elements");
 
-            Row row = sheet.getRow(rowIndex);
+            Row rowMin = sheetMinutes.getRow(rowIndex);
+            Row rowKms = sheetKilometers.getRow(rowIndex);
 
             for(int col = 9, j=0; col < generalColumns;j++, col++){ //TODO:23.03.2024 Здесь должно быть либо статическое значение, либо меняем ширину в динамике
                 JsonObject currentElement = elements.get(j).getAsJsonObject();
                 String status = currentElement.get("status").getAsString();
                 if ("FAIL".equals(status)){
-                    Cell cell = row.createCell(col);
-                    cell.setCellValue(status);
+                    Cell cellMin = rowMin.createCell(col);
+                    Cell cellKms = rowKms.createCell(col);
+                    cellMin.setCellValue(status);
+                    cellKms.setCellValue(status);
                 }
                 else{
                     JsonObject durationObject = currentElement.getAsJsonObject("duration");
-                    String durationValue = durationObject.get("value").getAsString();
-                    Cell cell = row.createCell(col);
-                    cell.setCellValue(durationValue);
-                    System.out.println("Duration value: " + durationValue);
+                    JsonObject distanceObject = currentElement.getAsJsonObject("distance");
+
+                    DecimalFormat df = new DecimalFormat("#.##"); // Определяем формат с двумя знаками после запятой
+
+                    double durationValue = durationObject.get("value").getAsDouble() / 60; //Получаем минуты
+
+                    double distanceValue = distanceObject.get("value").getAsDouble() / 1000; // Получаем километры
+
+                    Cell cellMin = rowMin.createCell(col);
+                    Cell cellKms = rowKms.createCell(col);
+
+                    cellMin.setCellValue(df.format(durationValue));
+                    cellKms.setCellValue(df.format(distanceValue));
+                    System.out.println("Duration value: " + durationValue+ " DistanceValue: "+ df.format(distanceValue));
                 }
 
             }
@@ -390,7 +444,7 @@ public class ApplicationMintrance {
             } catch (FileNotFoundException e) {
                 System.out.println("Возникла ошибка при записи в файл: " + e.getMessage() +
                         " (Проверьте, что файл закрыт на устройстве - в Excel)");
-                System.out.println("Попробуйте снова? (Y/N):");
+                System.out.println("Повторить? - в противном случае данные будут потеряны (Y/N):");
                 String response = scanner.nextLine().toUpperCase();
                 if (!response.equals("Y")) {
                     break; // Прерываем цикл, если пользователь не хочет повторить попытку
