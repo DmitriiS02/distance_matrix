@@ -3,6 +3,8 @@ package src.main.java.ru.distance_matrix;
 
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import org.apache.poi.POIXMLException;
 import org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.xmlbeans.*;
@@ -14,9 +16,7 @@ import com.sun.tools.javac.Main;
 
 import java.io.*;
 import java.lang.reflect.Array;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.prefs.Preferences;
@@ -33,8 +33,10 @@ public class ApplicationMintrance {
     private static boolean inWork = true;
     private static String apiKey = "abc3-dds3-ssa2";
     private static File executibleFile;
-    private static int rowToStart =4;
+    private static int rowToStart =10;
+    private static int generalColumns;
 
+    private static int generalRows;
     /* main method is the entry point of the program.
     It prompts the user to enter an expression and uses the evaluate method to evaluate it.
     If the user enters "q", the program will exit.
@@ -98,16 +100,14 @@ public class ApplicationMintrance {
                     } catch (Exception e) {
                         System.out.println("\nВозникла непредвиденная ошибка\n" + e);
                     }
-                    for (int i = 0; i < 2; i++) { //i<requestArray.size() TODO:23.03.2025  Здесь должно быть либо статическое значение, либо меняем ширину в динамике
-                        //System.out.println(requestArray.get(i));
-                        try {
-                            JsonObject result = requestData(requestArray.get(i));//Идем по сформированному request одной строки
-                            resultArray.add(result);
-                        } catch (Exception e) {
-                            System.out.println("\nНе удалось установить соединение с Яндекс сервисом" + e);
-                        }
+                    if(requestArray.size()==0){
+                        continue;
+                    }
 
-
+                    try {
+                        resultArray = requestData(requestArray,resultArray);//Идем по сформированному request одной строки
+                    } catch (Exception e) {
+                        System.out.println("\nНе удалось установить соединение с Яндекс сервисом" + e);
                     }
 
 
@@ -153,47 +153,67 @@ public class ApplicationMintrance {
        //System.out.println("\nНажмите на любую клавишу - затем Enter, чтобы вернуться в Меню");
 
     }
-    public static JsonObject requestData(String requestBody) {
+    public static ArrayList<JsonObject> requestData(ArrayList<String> requestArray,ArrayList<JsonObject> resultArray) {
         HttpURLConnection connection = null;
         StringBuilder response;
-        JsonObject json= new JsonObject();
-        try {
-            URL url = new URL(requestBody);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setUseCaches(false);
+        JsonObject json = new JsonObject();
+        for (int i =0;i<requestArray.size();i++) { //TODO:23.03.2025  Здесь должно быть либо статическое значение, либо меняем ширину в динамике
+            try {
+                URL url = new URL(requestArray.get(i));
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setUseCaches(false);
+                // Перед отправкой запроса лучше проверить закрыт ли файл на компе
+//                try{
+//                    FileOutputStream fileOut = new FileOutputStream(executibleFile);
+//                    fileOut.close();
+//                }
+//                catch (FileNotFoundException e){
+//                    System.out.println("Файл для записи не найден: " + e.getMessage()+" (Проверьте, что файл закрыт на устройстве - в Excel)");
+//                    return resultArray;
+//                }
 
-            connection.connect();
+                connection.connect();
 
-            StringBuilder responseBuilder = new StringBuilder();
+                StringBuilder responseBuilder = new StringBuilder();
 
-            if(HttpURLConnection.HTTP_UNAUTHORIZED == connection.getResponseCode()){
-                System.out.println("Ошибка валидации ключа доступа. Проверьте текущий статус ключа, при необходимоти - смените");
-            }
-            else if(HttpURLConnection.HTTP_OK == connection.getResponseCode()) {
-                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                String line;
-                while ((line = in.readLine())!= null){
-                    responseBuilder.append(line);
+                if (HttpURLConnection.HTTP_UNAUTHORIZED == connection.getResponseCode()) {
+                    System.out.println("Ошибка валидации ключа доступа. Проверьте текущий статус ключа, при необходимоти - смените");
+                } else if (HttpURLConnection.HTTP_OK == connection.getResponseCode()) {
+                    BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    String line;
+                    while ((line = in.readLine()) != null) {
+                        responseBuilder.append(line);
+                    }
+                    in.close();
+                    String jsonResponse = responseBuilder.toString();
+
+                    Gson gson = new Gson();
+                    json = gson.fromJson(jsonResponse, JsonObject.class);
+
                 }
-                in.close();
-                String jsonResponse = responseBuilder.toString();
+                //Обрабатываем случай, когда превышен лимит запросов.
+                else if (HttpURLConnection.HTTP_FORBIDDEN == connection.getResponseCode()) {
+                    System.out.println("!!! Внимание !!! Лимит запросов на сегодня превышен!");
+                }
 
-                Gson gson = new Gson();
-                json = gson.fromJson(jsonResponse, JsonObject.class);
-
-            }
-
-            connection.disconnect();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            if(connection!=null){
                 connection.disconnect();
+            } catch (UnknownHostException e) {
+                System.out.println("Не удалось подключиться к сервису Yandex. Проверьте Интернет - соединение");
+            } catch (ProtocolException e) {
+                throw new RuntimeException(e);
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
             }
+            resultArray.add(json);
         }
-        return json;
+        return resultArray;
     }
 
     public static ArrayList<String> fileExecuting() throws IOException {
@@ -218,32 +238,32 @@ public class ApplicationMintrance {
 
         if (filename != null) {
             executibleFile = new File(directory, filename);
-            DetectionOfLastRow();
             try {
                 // Создаем экземпляр FileInputStream для чтения файла
                 FileInputStream inputStream = new FileInputStream(executibleFile);
                 // Создаем экземпляр XSSFWorkbook с выбранным файлом
                 Workbook book = new XSSFWorkbook(inputStream);
-                Sheet sheet = book.getSheetAt(0);
-                int countNotEmpty =0;
+                Sheet sheet = book.getSheetAt(0); //TODO: Добавить второй лист.
+                DetectionOfLastRow(sheet);
+                CountingGeneralCols(sheet);
 
-                for (int rowOrig = rowToStart;rowOrig<=sheet.getLastRowNum();rowOrig++){
+                for (int rowOrig = rowToStart;rowOrig<=rowToStart+generalRows-1;rowOrig++){ // TODO: Поправить в циклах со статикой перед сдачей.
 
                     StringBuilder requestBody = new StringBuilder();
 
                     Row curRowOrigin = sheet.getRow(rowOrig);
-                    Cell curCelLatOrigin = curRowOrigin.getCell(21);
+                    Cell curCelLatOrigin = curRowOrigin.getCell(5);
                     String latOrigin = curCelLatOrigin.getStringCellValue();
-                    Cell curCelLonOrigin = curRowOrigin.getCell(22);
+                    Cell curCelLonOrigin = curRowOrigin.getCell(6);
                     String lonOrigin = curCelLonOrigin.getStringCellValue();
 //                    if ((latOrigin == null || lonOrigin ==null)||(latOrigin==""||lonOrigin=="")){
 //                        continue;
 //                    }
                     requestBody.append("https://api.routing.yandex.net/v2/distancematrix?origins="+latOrigin+","+lonOrigin+"&destinations=");
                     //System.out.println(requestBody); //Смотриим на тело запросаа
-                    for(int j = 26;j<29;j++){ //TODO: 23.03.2024
-                        Row curRowDestinationLat = sheet.getRow(1);
-                        Row curRowDestinationLon = sheet.getRow(2);
+                    for(int j = 9;j<generalColumns;j++){ //TODO: 23.03.2024
+                        Row curRowDestinationLat = sheet.getRow(7);
+                        Row curRowDestinationLon = sheet.getRow(8);
                         String latDest = curRowDestinationLat.getCell(j).getStringCellValue();
                         String lonDest = curRowDestinationLon.getCell(j).getStringCellValue();
 //                        if ((latDest.equals(null) || lonDest.equals(null))||(latDest.isEmpty()||lonDest.isEmpty())) {
@@ -259,30 +279,58 @@ public class ApplicationMintrance {
                     //countNotEmpty++;
 
                     requestBody.deleteCharAt(requestBody.length() - 1);
-                    requestBody.append("&mode=driving&apikey="+apiKey);
+                    requestBody.append("&mode=transit&apikey="+apiKey);
 
                     //System.out.println(requestBody);
                     requestBodyList.add(requestBody.toString());
                 }
 
-                System.out.println(countNotEmpty);
 
                 inputStream.close();
             } catch (IOException e) {
-               ;
+                e.printStackTrace();
+            }catch (OutOfMemoryError e) {
+                System.out.println("Файл слишком велик, выберите меньший по размеру файл");
             }
         }
         return requestBodyList;
     }
-    public static void DetectionOfLastRow() throws IOException {
-        File execFile = executibleFile;
-        FileInputStream inputStream = new FileInputStream(execFile);
-        Workbook workbook = new XSSFWorkbook(inputStream);
-        Sheet sheet = workbook.getSheetAt(0);
+    public static void CountingGeneralCols(Sheet sheet){
+        Row row = sheet.getRow(3);//Получаем строку по которой будем считать кол-во столбцов
+        boolean rowEnded =false;
+        int cellIndex = 9;
+        int countCols = 0;
+
+        while(!rowEnded){
+            Cell cell = row.getCell(cellIndex);
+            if(cell == null|| cell.getStringCellValue().toString()==""){
+                break;
+            }
+
+            String strCell = cell.getStringCellValue();
+            System.out.println(cell+" ");
+            cellIndex++;
+            countCols++;
+        }
+        generalColumns = cellIndex;
+        CountingRows(countCols);
+        System.out.println(cellIndex+" " +countCols);
+
+    }
+    public static void CountingRows(int countCols){
+        int limitOfDayRequest = 100000;
+        int res;
+        res = limitOfDayRequest/countCols;
+        generalRows = res;
+        System.out.println(res);
+    }
+
+    public static void DetectionOfLastRow(Sheet sheet) throws IOException {
+
 
         int startRow = rowToStart; // Начальная строка диапазона
         int endRow = sheet.getLastRowNum(); // Конечная строка диапазона
-        int columnToCheck = 26;
+        int columnToCheck = 9;
 
         for (int i = startRow; i <= endRow; i++) {
             Row row = sheet.getRow(i);
@@ -292,8 +340,6 @@ public class ApplicationMintrance {
                 break;
             }
         }
-        inputStream.close();
-
     }
     public static void WriteInExcel(ArrayList<JsonObject> arrayResult) throws IOException {
         File execFile = executibleFile;
@@ -301,14 +347,18 @@ public class ApplicationMintrance {
         Workbook workbook = new XSSFWorkbook(inputStream);
         Sheet sheet = workbook.getSheetAt(0);
 
-        for (int rowIndex = rowToStart, i = 0; i<2; i++, rowIndex++) { //TODO:23.03.2024  Здесь должно быть либо статическое значение, либо меняем ширину в динамике
+        for (int rowIndex = rowToStart, i = 0; i<arrayResult.size(); i++, rowIndex++) { //TODO:23.03.2024  Здесь должно быть либо статическое значение, либо меняем ширину в динамике
             JsonObject singleResponse = arrayResult.get(i);
-            JsonObject rows = singleResponse.getAsJsonArray("rows").get(0).getAsJsonObject();
-            JsonArray elements = rows.getAsJsonArray("elements");
+            JsonArray rows = singleResponse.getAsJsonArray("rows");
+            if (rows == null){
+                continue;
+            }
+            JsonObject rowElement = rows.get(0).getAsJsonObject();
+            JsonArray elements = rowElement.getAsJsonObject().getAsJsonArray("elements");
 
             Row row = sheet.getRow(rowIndex);
 
-            for(int col = 26, j=0; col < 29;j++, col++){ //TODO:23.03.2024 Здесь должно быть либо статическое значение, либо меняем ширину в динамике
+            for(int col = 9, j=0; col < generalColumns;j++, col++){ //TODO:23.03.2024 Здесь должно быть либо статическое значение, либо меняем ширину в динамике
                 JsonObject currentElement = elements.get(j).getAsJsonObject();
                 String status = currentElement.get("status").getAsString();
                 if ("FAIL".equals(status)){
@@ -327,12 +377,27 @@ public class ApplicationMintrance {
         }
 
 
+        Scanner scanner = new Scanner(System.in);
+        boolean successfulWrite = false;
 
-        FileOutputStream fileOut = new FileOutputStream(execFile);
-        workbook.write(fileOut);
-        workbook.close();
-        fileOut.close();
-    }
+        do {
+            try {
+                FileOutputStream fileOut = new FileOutputStream(execFile);
+                workbook.write(fileOut);
+                workbook.close();
+                fileOut.close();
+                successfulWrite = true; // Запись прошла успешно, выходим из цикла
+            } catch (FileNotFoundException e) {
+                System.out.println("Возникла ошибка при записи в файл: " + e.getMessage() +
+                        " (Проверьте, что файл закрыт на устройстве - в Excel)");
+                System.out.println("Попробуйте снова? (Y/N):");
+                String response = scanner.nextLine().toUpperCase();
+                if (!response.equals("Y")) {
+                    break; // Прерываем цикл, если пользователь не хочет повторить попытку
+                }
+            }
+        } while (!successfulWrite);
+     }
     public static void ExitFromApp(){
         // Создаем и запускаем поток, который будет выводить точки
         Thread dotsThread = new Thread(() -> {

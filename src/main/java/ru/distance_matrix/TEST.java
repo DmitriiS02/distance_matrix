@@ -3,32 +3,127 @@ package src.main.java.ru.distance_matrix;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.awt.*;
+import java.io.*;
+import java.util.ArrayList;
 
 public class TEST {
+    private static File executibleFile;
+    private static String apiKey = "abc3-dds3-ssa2";
+    private static int rowToStart =4;
     public static void main(String[] args) {
-        Gson gson = new Gson();
-        JsonArray input = null;
+        Frame frame = new Frame();
+        FileDialog fileDialog = new FileDialog(frame, "Выберите файл", FileDialog.LOAD);
+        // Установка фильтра файлов
+        //fileDialog.setFilenameFilter(new MyFileFilter());
 
-        try (BufferedReader br = new BufferedReader(new FileReader("C:/my_java/distance_matrix/src/main/resources/META-INF/response.json"))) {
-            input  = gson.fromJson(br, JsonArray.class);
-            JsonObject element = input.get(0).getAsJsonObject();
-            JsonObject rows = element.getAsJsonArray("rows").get(0).getAsJsonObject();
-            JsonArray elements = rows.getAsJsonArray("elements");
+        fileDialog.setVisible(true);
 
-            for (int i = 0; i<elements.size();i++) {
-                JsonObject currentElement = elements.get(i).getAsJsonObject();
-                JsonObject durationObject = currentElement.getAsJsonObject("duration");
-                int durationValue = durationObject.get("value").getAsInt();
-                System.out.println("Duration value: " + durationValue);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        String directory = fileDialog.getDirectory();
+        String filename = fileDialog.getFile();
+
+        if (directory != null && filename != null) {
+            String filePath = directory + filename;
+            System.out.println("Файл выбран: " + filePath);
+        } else {
+            System.out.println("Выбор файла отменён.");
         }
 
-        // Теперь у вас есть объект elementsArray, содержащий данные из вашего файла JSON
+        ArrayList<String> requestBodyList = new ArrayList<String>();
+
+        if (filename != null) {
+            executibleFile = new File(directory, filename);
+            //DetectionOfLastRow();
+
+            try {
+                // Создаем экземпляр FileInputStream для чтения файла
+                FileInputStream inputStream = new FileInputStream(executibleFile);
+                // Создаем экземпляр XSSFWorkbook с выбранным файлом
+                Workbook book = new XSSFWorkbook(inputStream);
+                Sheet sheet = book.getSheetAt(0);
+                CountingGeneralCols(sheet);
+                int countNotEmpty =0;
+
+                for (int rowOrig = rowToStart;rowOrig<=sheet.getLastRowNum();rowOrig++){
+
+                    StringBuilder requestBody = new StringBuilder();
+
+                    Row curRowOrigin = sheet.getRow(rowOrig);
+                    Cell curCelLatOrigin = curRowOrigin.getCell(21);
+                    String latOrigin = curCelLatOrigin.getStringCellValue();
+                    Cell curCelLonOrigin = curRowOrigin.getCell(22);
+                    String lonOrigin = curCelLonOrigin.getStringCellValue();
+//                    if ((latOrigin == null || lonOrigin ==null)||(latOrigin==""||lonOrigin=="")){
+//                        continue;
+//                    }
+                    requestBody.append("https://api.routing.yandex.net/v2/distancematrix?origins="+latOrigin+","+lonOrigin+"&destinations=");
+                    //System.out.println(requestBody); //Смотриим на тело запросаа
+                    for(int j = 26;j<29;j++){ //TODO: 23.03.2024
+                        Row curRowDestinationLat = sheet.getRow(1);
+                        Row curRowDestinationLon = sheet.getRow(2);
+                        String latDest = curRowDestinationLat.getCell(j).getStringCellValue();
+                        String lonDest = curRowDestinationLon.getCell(j).getStringCellValue();
+//                        if ((latDest.equals(null) || lonDest.equals(null))||(latDest.isEmpty()||lonDest.isEmpty())) {
+//                            continue;
+//                        }
+
+                        requestBody.append(latDest+","+lonDest+"|");
+                        //System.out.println(latDest+" "+lonDest);
+
+
+
+                    }
+                    //countNotEmpty++;
+
+                    requestBody.deleteCharAt(requestBody.length() - 1);
+                    requestBody.append("&mode=driving&apikey="+apiKey);
+
+                    //System.out.println(requestBody);
+                    requestBodyList.add(requestBody.toString());
+                }
+
+                System.out.println(countNotEmpty);
+
+                inputStream.close();
+            } catch (IOException e) {
+                ;
+            }
+        }
+        System.out.println(requestBodyList);
+
     }
+    public static void CountingGeneralCols(Sheet sheet){
+        Row row = sheet.getRow(0);
+        boolean rowEnded =false;
+        int cellIndex = 26;
+        int countCols = 0;
+
+        while(!rowEnded){
+            Cell cell = row.getCell(cellIndex);
+            if(cell == null|| cell.getStringCellValue().isEmpty()){
+                break;
+            }
+
+            String strCell = cell.getStringCellValue();
+            System.out.println(cell+" ");
+            cellIndex++;
+            countCols++;
+        }
+        CountingRows(countCols);
+        System.out.println(cellIndex+" " +countCols);
+
+    }
+    public static void CountingRows(int countCols){
+        int limitOfDayRequest = 1000;
+        int res;
+        res = limitOfDayRequest/countCols;
+        System.out.println(res);
+    }
+
 }

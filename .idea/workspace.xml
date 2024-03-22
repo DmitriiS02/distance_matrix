@@ -10,8 +10,32 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="97670564-04d5-4293-8b0a-38dbd037ad9f" name="Changes" comment="Working Console">
+      <change afterPath="$PROJECT_DIR$/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/distance_matrix.eml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/distance_matrix.eml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/src/main/java/ru/distance_matrix/config.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/distance_matrix.eml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/distance_matrix.eml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/distance_matrix.eml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/distance_matrix.eml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/distance_matrix.eml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/distance_matrix.eml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/distance_matrix.eml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/distance_matrix.eml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/bin/bin/bin/bin/bin/bin/bin/bin/bin/distance_matrix.eml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/bin/bin/bin/bin/bin/bin/bin/bin/distance_matrix.eml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/bin/bin/bin/bin/bin/bin/bin/distance_matrix.eml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/bin/bin/bin/bin/bin/bin/distance_matrix.eml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/bin/bin/bin/bin/bin/distance_matrix.eml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/bin/bin/bin/bin/distance_matrix.eml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/bin/bin/bin/distance_matrix.eml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/bin/bin/distance_matrix.eml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/bin/distance_matrix.eml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bin/distance_matrix.eml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/distance_matrix.eml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ru/distance_matrix/ApplicationMintrance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/distance_matrix/ApplicationMintrance.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/distance_matrix/TEST.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/distance_matrix/TEST.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ru/distance_matrix/config.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ru/distance_matrix/config.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,22 +60,27 @@
     </option>
   </component>
   <component name="ProjectId" id="2doJIX5zq8tjQxABgojWlXZuGvl" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
+    "jdk.selected.JAVA_MODULE": "11",
     "last_opened_file_path": "C:/java_libs/gson-2.10.1.jar",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
+    "project.structure.last.edited": "Libraries",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "MavenSettings",
@@ -87,7 +116,8 @@
       <workItem from="1710858915375" duration="3464000" />
       <workItem from="1710863926944" duration="1393000" />
       <workItem from="1710865404719" duration="22875000" />
-      <workItem from="1710934663989" duration="25130000" />
+      <workItem from="1710934663989" duration="45530000" />
+      <workItem from="1711035032869" duration="10385000" />
     </task>
     <task id="LOCAL-00001" summary="Firs Commite">
       <option name="closed" value="true" />
@@ -113,7 +143,15 @@
       <option name="project" value="LOCAL" />
       <updated>1710967796270</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Working Console">
+      <option name="closed" value="true" />
+      <created>1711008129781</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1711008129781</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -131,6 +169,7 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Firs Commite" />
     <MESSAGE value="Working Console" />
     <option name="LAST_COMMIT_MESSAGE" value="Working Console" />
@@ -139,9 +178,14 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/ru/distance_matrix/TEST.java</url>
-          <line>17</line>
-          <option name="timeStamp" value="12" />
+          <url>file://$PROJECT_DIR$/src/main/java/ru/distance_matrix/ApplicationMintrance.java</url>
+          <line>321</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/ru/distance_matrix/ApplicationMintrance.java</url>
+          <line>245</line>
+          <option name="timeStamp" value="27" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
