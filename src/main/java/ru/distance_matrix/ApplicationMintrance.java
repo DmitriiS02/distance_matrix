@@ -30,7 +30,7 @@ import com.google.gson.JsonObject;
 
 public class ApplicationMintrance {
     private static double prevResult = 0;
-    private static final String CONFIG_FILE = "C:/my_java/distance_matrix/src/main/java/ru/distance_matrix/config.properties";
+    private static final String CONFIG_FILE = new File("src/main/java/ru/distance_matrix/config.properties").getAbsolutePath();
     private static boolean inWork = true; //Переменная определяющая работу программы
     private static String apiKey = "abc3-dds3-ssa2";
     private static File executibleFile; // Здесь храним файл выбранный пользователем
@@ -89,19 +89,26 @@ public class ApplicationMintrance {
 
                     ArrayList<String> requestArray = new ArrayList<String>();
 
-                    System.out.println("Убедитесь, что в выбранном файле структура соответствует следующим параметрам:\n" +
-                            "В столбце \"V\" начилая с 5-й строки перечислен координаты северной широты,\n" +
-                            "а в столбце \"W\" c 5-й строки перечислены координаты западной долготы.\n");
+                    System.out.println("Убедитесь, что в выбранном файле структура соответствует следующим параметрам:\n" + // TODO: Переписать под новую структуру
+                            "В столбце \"F\"  начиная с 11-й строки перечислен координаты северной широты,\n" +
+                            "а в столбце \"G\" c 11-й строки перечислены координаты западной долготы точки отправления.\n\n" +
+                            "Так же в столбцах, начиная с \"J\", в 8-й строке указана северная широта, \n" +
+                            "а в 9й строке того же столбца  указана восточная долгота точки назначения\n\n" +
+                            "Помните, что количество столбцов характеризующих точки назначения не должно превышать 100 шт." +
+                            "\nМежду ними не должно быть пробелов.");
                     try {
                         requestArray = fileExecuting();
                     } catch (ColsMoreHundredException e){
-                        System.out.println("\n К сожалению в вашем файле указано более 100 пунктов назначения");
+                        System.out.println("\n К сожалению в вашем файле существует более 100 пунктов назначения, пожалуйста сократите количество");
                         continue;
                     }catch (NullPointerException e) {
                         System.out.println("\nФайл Пуст. Проверьте на содержание\n\n" + e);
                     } catch (NotOfficeXmlFileException e) {
-                        System.out.println("\nНеверный формат входного файла, выберите .xlsx" + e);
-                    } catch (Exception e) {
+                        System.out.println("\nНеверный формат входного файла, выберите .xlsx " + e);
+                    }catch (POIXMLException e) {
+                        System.out.println("\n Файл слишком велик, уберите сводные листы из файла или сократите кол-во строк\n Либо выберите файл требуемого формата (.xlsx)");
+                    }catch (Exception e) {
+                        e.printStackTrace();
                         System.out.println("\nВозникла непредвиденная ошибка\n" + e);
                     }
                     if(requestArray.size()==0){
@@ -110,7 +117,19 @@ public class ApplicationMintrance {
 
                     try {
                         resultArray = requestData(requestArray,resultArray);//Идем по сформированному request одной строки
-                    } catch (Exception e) {
+                    } catch(UnknownHostException e){
+                        System.out.println("Не удалось подключиться к сервису Yandex. Проверьте Интернет - соединение");
+                        continue;
+                    } catch (UnauthorisedException e){
+                        System.out.println("\n\"Ошибка валидации ключа доступа. Проверьте текущий статус ключа, при необходимоти - смените\"");
+                        continue;
+                    } catch (HTTPForbiddenException e){
+                        System.out.println("\n!!! Внимание !!! Лимит запросов на сегодня превышен!");
+                        continue;
+                    } catch (TooManyRequestsException e){
+                        System.out.println("\n!!! Внимание !!! Лимит запросов на сегодня превышен!/ Слишком много запросов");
+                        continue;
+                    }catch (Exception e) {
                         System.out.println("\nНе удалось установить соединение с Яндекс сервисом" + e);
                     }
 
@@ -122,7 +141,6 @@ public class ApplicationMintrance {
                         System.out.println("\nВ выбранном файле отсутвует 2й лист" );
                     }
 
-                    //System.out.println(resultArray);
                     break;
 
                 case 2:
@@ -162,7 +180,7 @@ public class ApplicationMintrance {
        //System.out.println("\nНажмите на любую клавишу - затем Enter, чтобы вернуться в Меню");
 
     }
-    public static ArrayList<JsonObject> requestData(ArrayList<String> requestArray,ArrayList<JsonObject> resultArray) {
+    public static ArrayList<JsonObject> requestData(ArrayList<String> requestArray,ArrayList<JsonObject> resultArray) throws UnknownHostException, UnauthorisedException, HTTPForbiddenException, TooManyRequestsException {
         HttpURLConnection connection = null;
         StringBuilder response;
         JsonObject json = new JsonObject();
@@ -184,10 +202,12 @@ public class ApplicationMintrance {
 
                 connection.connect();
 
+                drawProgressBar(i + 1, requestArray.size());
+
                 StringBuilder responseBuilder = new StringBuilder();
 
                 if (HttpURLConnection.HTTP_UNAUTHORIZED == connection.getResponseCode()) {
-                    System.out.println("Ошибка валидации ключа доступа. Проверьте текущий статус ключа, при необходимоти - смените");
+                    throw new UnauthorisedException("");
                 } else if (HttpURLConnection.HTTP_OK == connection.getResponseCode()) {
                     BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                     String line;
@@ -203,18 +223,27 @@ public class ApplicationMintrance {
                 }
                 //Обрабатываем случай, когда превышен лимит запросов.
                 else if (HttpURLConnection.HTTP_FORBIDDEN == connection.getResponseCode()) {
-                    System.out.println("!!! Внимание !!! Лимит запросов на сегодня превышен!");
+                    throw new HTTPForbiddenException("");
+                }
+                else if(429==connection.getResponseCode()){
+                    throw new TooManyRequestsException("");
                 }
 
                 connection.disconnect();
             } catch (UnknownHostException e) {
-                System.out.println("Не удалось подключиться к сервису Yandex. Проверьте Интернет - соединение");
+                throw new UnknownHostException();
             } catch (ProtocolException e) {
                 throw new RuntimeException(e);
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             } catch (IOException e) {
                 throw new RuntimeException(e);
+            } catch (UnauthorisedException e) {
+                throw new UnauthorisedException("");
+            } catch (HTTPForbiddenException e) {
+                throw new HTTPForbiddenException("");
+            } catch (TooManyRequestsException e) {
+                throw new TooManyRequestsException("");
             } finally {
                 if (connection != null) {
                     connection.disconnect();
@@ -238,7 +267,7 @@ public class ApplicationMintrance {
 
         if (directory != null && filename != null) {
             String filePath = directory + filename;
-            System.out.println("Файл выбран: " + filePath);
+            System.out.println("\n\nФайл выбран: " + filePath+"\n");
         } else {
             System.out.println("Выбор файла отменён.");
         }
@@ -320,9 +349,6 @@ public class ApplicationMintrance {
             if(cell == null|| cell.getStringCellValue().toString()==""){
                 break;
             }
-
-            String strCell = cell.getStringCellValue();
-            System.out.println(cell+" ");
             cellIndex++;
             countCols++;
             if(countCols>100){
@@ -331,7 +357,6 @@ public class ApplicationMintrance {
         }
         generalColumns = cellIndex;
         CountingRows(countCols);
-        System.out.println(cellIndex+" " +countCols);
 
     }
 
@@ -340,7 +365,6 @@ public class ApplicationMintrance {
         int res;
         res = limitOfDayRequest/countCols;
         generalRows = res;
-        System.out.println(res);
     }
     public static void  FindCountofExecutibleRows(Sheet sheet){
         int emptyRowCount = 0;
@@ -385,8 +409,8 @@ public class ApplicationMintrance {
         File execFile = executibleFile;
         FileInputStream inputStream = new FileInputStream(execFile);
         Workbook workbook = new XSSFWorkbook(inputStream);
-        Sheet sheetMinutes = workbook.getSheet("УДМУРТСКАЯ_РЕСП(СЕЛТИНСКИЙ)мин");
-        Sheet sheetKilometers = workbook.getSheet("УДМУРТСКАЯ_РЕСП(СЕЛТИНСКИЙ)км"); //TODO: Отдельный метод валидации файла
+        Sheet sheetMinutes = workbook.getSheetAt(0);
+        Sheet sheetKilometers = workbook.getSheetAt(1); //TODO: Отдельный метод валидации файла
 
         for (int rowIndex = rowToStart, i = 0; i<arrayResult.size(); i++, rowIndex++) { //TODO:23.03.2024  Здесь должно быть либо статическое значение, либо меняем ширину в динамике
             JsonObject singleResponse = arrayResult.get(i);
@@ -424,7 +448,7 @@ public class ApplicationMintrance {
 
                     cellMin.setCellValue(df.format(durationValue));
                     cellKms.setCellValue(df.format(distanceValue));
-                    System.out.println("Duration value: " + durationValue+ " DistanceValue: "+ df.format(distanceValue));
+                    //System.out.println("Duration value: " + durationValue+ " DistanceValue: "+ df.format(distanceValue));
                 }
 
             }
@@ -447,10 +471,15 @@ public class ApplicationMintrance {
                 System.out.println("Повторить? - в противном случае данные будут потеряны (Y/N):");
                 String response = scanner.nextLine().toUpperCase();
                 if (!response.equals("Y")) {
+                    System.out.println("\n Данные были стерты, придется повторить запросы");
                     break; // Прерываем цикл, если пользователь не хочет повторить попытку
                 }
             }
         } while (!successfulWrite);
+        if (successfulWrite) {
+            System.out.println("\nДанные были успешно записаны. " +
+                    "\nПервая страница файла - значения в минутах, вторая - в километрах");
+        }
      }
     public static void ExitFromApp(){
         // Создаем и запускаем поток, который будет выводить точки
@@ -500,4 +529,23 @@ public class ApplicationMintrance {
             ex.printStackTrace();
         }
     }
+
+    // Метод для рисования прогресс-бара
+    private static void drawProgressBar(int currentRequest, int totalRequests) {
+        int progress = (currentRequest * 100) / totalRequests;
+        int progressBarLength = 50;
+        int numFilled = (progress * progressBarLength) / 100;
+        StringBuilder progressBar = new StringBuilder("[");
+        for (int i = 0; i < progressBarLength; i++) {
+            if (i < numFilled) {
+                progressBar.append("=");
+
+            } else {
+                progressBar.append(" ");
+            }
+        }
+        progressBar.append("] ").append(progress).append("%");
+        System.out.print("\r" + progressBar.toString());
+    }
+
 }

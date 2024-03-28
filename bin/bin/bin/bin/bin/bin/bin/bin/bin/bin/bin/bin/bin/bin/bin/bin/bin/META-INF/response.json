@@ -1,0 +1,28 @@
+[
+{
+  "rows": [
+    {
+      "elements": [
+        {
+          "status": "OK",
+          "distance": {
+            "value": 13389
+          },
+          "duration": {
+            "value": 1094
+          }
+        },
+        {
+          "status": "OK",
+          "distance": {
+            "value": 13932
+          },
+          "duration": {
+            "value": 1298
+          }
+        }
+      ]
+    }
+  ]
+}
+]
